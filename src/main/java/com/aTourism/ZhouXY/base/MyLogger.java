@@ -10,6 +10,7 @@ public class MyLogger {
     /** 记录日志对象 */
     private Logger LOGGER;
 
+
     /**
      * 日志
      * */
