@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的
+例如namespace="com.aTourism.ZhouXY.mapper.UserMapper"就是com.aTourism.ZhouXY.mapper(包名)+UserMapper(UserMapper.xml文件去除后缀)
+ -->
+<mapper namespace="com.aTourism.ZhouXY.mapping">
+    <!-- 在select标签中编写查询的SQL语句， 设置select标签的id属性为addUser，id属性值必须是唯一的，不能够重复
+    使用parameterType属性指明查询时使用的参数类型(入参类型)，resultType属性指明查询返回的结果集类型
+    resultType="com.aTourism.ZhouXY.bean.User"就表示将查询结果封装成一个User类的对象返回
+    User类就是users表所对应的实体类
+    -->
+
+    <resultMap id="baseMap" type="com.aTourism.ZhouXY.bean.User">
+        <id property="userId" column="id" jdbcType="BIGINT"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="userPassword" column="user_password" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <!-- （1）往user_info表中插入一条记录，代表一个用户  -->
+    <insert id="addUser" parameterType="com.aTourism.ZhouXY.bean.User">
+        INSERT INTO user_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userName != null and userName != ''">
+                user_name,
+            </if>
+            <if test="userPassword != null and userPassword != ''">
+                user_password,
+            </if>
+            del_flag
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userName != null and userName != ''">
+                #{userName ,jdbcType=VARCHAR},
+            </if>
+            <if test="userPassword != null and userPassword != ''">
+                md5(#{userPassword ,jdbcType=VARCHAR}),
+            </if>
+            '0'
+        </trim>
+    </insert>
+
+    <select id="validateLogin" parameterType="com.aTourism.ZhouXY.bean.User" resultType="java.lang.Long">
+        SELECT
+          id
+        FROM
+          user_info u
+        WHERE
+          u.user_name= #{userName} and u.user_password = md5(#{userPassword}) AND  del_flag = '0'
+    </select>
+
+</mapper>

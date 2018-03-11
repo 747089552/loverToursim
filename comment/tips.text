@@ -1,0 +1,8 @@
+首次运行该系统注意：
+    1.修改mysql的地址——在ApplicationContext.xml中修改url，username和password;
+    2.在数据库中运行aiTourism.sql文件;
+    3.将该demo部署到tomcat中，注意端口号.
+
+
+ question:
+    Email:baijianzhong@qianmi.com
